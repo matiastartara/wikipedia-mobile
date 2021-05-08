@@ -14,6 +14,9 @@ public class SearchTest extends BaseTest {
         test = extent.createTest("Search Article Test", "Searching article");
         test.log(Status.INFO, "Opening app");
         HomePage home = new  HomePage((AppiumDriver<MobileElement>) getDriver());
+        home.openSearch()
+            .searchText("Roma")
+            .OpenItem();
 
     }
 

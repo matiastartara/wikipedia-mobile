@@ -56,6 +56,7 @@ public class DriverUtils {
                 capabilities.setCapability(MobileCapabilityType.PLATFORM, MobilePlatform.IOS);
                 capabilities.setCapability(MobileCapabilityType.AUTOMATION_NAME, "XCUITest");
                 capabilities.setCapability(MobileCapabilityType.NO_RESET, "True");
+                capabilities.setCapability("udid", "UDID of your test device");
                 driver = new IOSDriver<RemoteWebElement>(new URL(completeURL), capabilities);
                 break;
 
