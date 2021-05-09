@@ -11,6 +11,21 @@ public class HomePage extends BasePage {
     @AndroidFindBy(id="org.wikipedia:id/search_container")
     private AndroidElement searchContainer;
 
+    @AndroidFindBy(id="org.wikipedia:id/voice_search_button")
+    private AndroidElement voiceSearchBtn;
+
+    @AndroidFindBy(id="menu_overflow_button")
+    private AndroidElement menuOverflow;
+
+    @AndroidFindBy(id="org.wikipedia:id/day_header_text")
+    private AndroidElement dayText;
+
+    @AndroidFindBy(id="org.wikipedia:id/fragment_main_nav_tab_layout")
+    private AndroidElement navigationBar;
+
+    @AndroidFindBy(id="org.wikipedia:id/view_announcement_header_image")
+    private AndroidElement announcementHeaderImage;
+
     public HomePage(AppiumDriver<MobileElement> driver) {
         super(driver);
     }
@@ -18,6 +33,30 @@ public class HomePage extends BasePage {
     public SearchPage openSearch(){
         getWait().until(ExpectedConditions.visibilityOf(searchContainer)).click();
         return new SearchPage(getDriver());
+    }
+
+    public boolean isVoiceSearchBtnDisplayed(){
+        return voiceSearchBtn.isDisplayed();
+    }
+
+    public boolean isNavigationBarDisplayed(){
+        return navigationBar.isDisplayed();
+    }
+
+    public boolean isMenuOverflowDisplayed(){
+        return menuOverflow.isDisplayed();
+    }
+
+    public boolean isAnnouncementImageDisplayed(){
+        return announcementHeaderImage.isDisplayed();
+    }
+
+    public void openMenuOverflow(){
+        click(menuOverflow);
+    }
+
+    public String getDayHeaderText(){
+        return getWait().until(ExpectedConditions.visibilityOf(dayText)).getText();
     }
 
 }
