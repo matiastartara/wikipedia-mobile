@@ -20,11 +20,8 @@ public class WaitUtils {
     }
 
     public static boolean waitToContainElement(WebDriver driver, final List<MobileElement> elements, final String optionText) {
-        return new WebDriverWait(driver, maxWait).until((ExpectedCondition<Boolean>) driver1 -> {
-            boolean exist;
-            exist= elements.stream().anyMatch(x->x.getText().equals(optionText));
-            return exist;
-        });
+        return new WebDriverWait(driver, maxWait).until((ExpectedCondition<Boolean>)
+                driver1 -> elements.stream().anyMatch(x->x.getText().equals(optionText)));
     }
 
 }
