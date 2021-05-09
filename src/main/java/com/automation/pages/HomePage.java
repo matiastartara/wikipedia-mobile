@@ -51,7 +51,7 @@ public class HomePage extends BasePage {
         return announcementHeaderImage.isDisplayed();
     }
 
-    public void openMenuOverflow(){
+    public void openMenu(){
         click(menuOverflow);
     }
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Default Suite">
-<test name="Wikipedia Search Test Automation">
+<test name="Wikipedia Home Settings Test">
     <classes>
-        <class name="test.SearchTest">
+        <class name="test.HomeTest">
             <methods>
-                <include name="HomeElementsTest"></include>
+            <include name="SettingsTest"/>
             </methods>
         </class>
     </classes>
