@@ -4,7 +4,7 @@ Appium project using Java and Testng on wikipedia apk
 
 Java 11 installed 
 
-Intellij Idea or another IDE
+Intellij Idea
 
 Appium Desktop App
 
