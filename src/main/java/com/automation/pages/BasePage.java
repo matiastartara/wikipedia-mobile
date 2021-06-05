@@ -5,6 +5,7 @@ import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import io.appium.java_client.touch.LongPressOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -55,10 +56,24 @@ public class BasePage {
     //Horizontal scroll
     protected void swipe(WebElement fromElement,WebElement toElement){
         TouchAction tAction = new TouchAction(getDriver());
-        tAction.press(PointOption.point(fromElement.getLocation())).waitAction().moveTo(PointOption.point(toElement.getLocation())).release().perform();
+        tAction.press(PointOption.point(fromElement.getLocation())).waitAction()
+                .moveTo(PointOption.point(toElement.getLocation())).release().perform();
     }
 
     protected void scrollTo(String text){
-        ((AndroidDriver<MobileElement>) driver).findElementByAndroidUIAutomator(("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector().textContains(\""+text+"\").instance(0))"));
+        ((AndroidDriver<MobileElement>) driver).findElementByAndroidUIAutomator
+                (("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector()" +
+                        ".textContains(\""+text+"\").instance(0))"));
     }
+
+    public void longPress(WebElement element){
+        TouchAction tAction=new TouchAction(driver);
+        tAction.longPress((LongPressOptions) element).perform();
+    }
+
+    public void selectOptionSpinner(MobileElement spinner,String optionTextSpinner){
+        spinner.click();
+        driver.findElement(By.name(optionTextSpinner)).click();
+    }
+
 }

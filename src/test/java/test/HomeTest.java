@@ -42,7 +42,7 @@ public class HomeTest extends BaseTest {
         home.openMenu();
         AccountContainerPage container = new AccountContainerPage((AppiumDriver<MobileElement>) getDriver());
         container.waitForLoad();
-        Assert.assertTrue(container.isAccountContainerDisplayed(),"Account login container  not displayed");
+        Assert.assertTrue(container.isAccountContainerDisplayed(),"Account login container not displayed");
         test.log(Status.INFO, "Click on settings");
         container.clickOnSettings();
         SettingsPage settings = new SettingsPage((AppiumDriver<MobileElement>) getDriver());
@@ -51,6 +51,5 @@ public class HomeTest extends BaseTest {
         Assert.assertTrue(settings.containSubTitle("Wikipedia languages"));
         Assert.assertTrue(settings.containSubTitle("App theme"));
         Assert.assertTrue(settings.containSubTitle("Enable reading list syncing"));
-
     }
 }
