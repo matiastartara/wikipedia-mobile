@@ -3,7 +3,11 @@
 <suite name="Default Suite">
 <test name="Wikipedia Home Test Automation">
     <classes>
-        <class name="test.HomeTest"></class>
+        <class name="test.HomeTest">
+            <methods>
+                <include name="HomeElementsTest"></include>
+            </methods>
+        </class>
     </classes>
 </test>
 </suite>

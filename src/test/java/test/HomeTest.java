@@ -1,7 +1,7 @@
 package test;
 
-import com.automation.pages.HomePage;
 import com.automation.pages.AccountContainerPage;
+import com.automation.pages.HomePage;
 import com.automation.pages.SettingsPage;
 import com.aventstack.extentreports.Status;
 import io.appium.java_client.AppiumDriver;
@@ -16,21 +16,20 @@ import java.util.Date;
 public class HomeTest extends BaseTest {
 
     @Test
-    public void HomeElementsTest(){
+    public void HomeElementsTest() {
         test = extent.createTest("Home Test", "Verify home elements test");
         test.log(Status.INFO, "Opening app");
-        HomePage home = new  HomePage((AppiumDriver<MobileElement>) getDriver());
+        HomePage home = new HomePage((AppiumDriver<MobileElement>) getDriver());
         test.log(Status.INFO, "Checking elements displayed");
-        Assert.assertTrue(home.isNavigationBarDisplayed(),"Navigation bar is not displayed");
-        Assert.assertTrue(home.isVoiceSearchBtnDisplayed(),"Voice search button is not displayed");
-        Assert.assertTrue(home.isMenuOverflowDisplayed(),"Menu Overflow is not displayed");
-        Assert.assertTrue(home.isAnnouncementImageDisplayed(),"Announcement Image is not displayed");
-
+        Assert.assertTrue(home.isNavigationBarDisplayed(), "Navigation bar is not displayed");
+        Assert.assertTrue(home.isVoiceSearchBtnDisplayed(), "Voice search button is not displayed");
+        Assert.assertTrue(home.isMenuOverflowDisplayed(), "Menu Overflow is not displayed");
+        home.closeAnnouncementImage();
         String day = new SimpleDateFormat("EEEE").format(new Date());
         String month = new SimpleDateFormat("MMMM").format(new Date());
         String day_number = new SimpleDateFormat("d").format(new Date());
-        String dayFormat_expected=day+", "+month+" "+day_number;
-        Assert.assertEquals(home.getDayHeaderText(),dayFormat_expected);
+        String dayFormat_expected = day + ", " + month.substring(0, 3) + " " + day_number;
+        Assert.assertEquals(home.getDayHeaderText(), dayFormat_expected);
     }
 
     @Test
