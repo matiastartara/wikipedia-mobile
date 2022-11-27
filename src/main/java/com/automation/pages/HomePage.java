@@ -47,12 +47,9 @@ public class HomePage extends BasePage {
         return menuOverflow.isDisplayed();
     }
 
-    public boolean isAnnouncementImagePresent(){
-        return isElementPresent(announcementHeaderImage);
-    }
-
     public void closeAnnouncementImage() {
-        click(getDriver().findElement(announcementHeaderImage));
+        if (isElementPresent(announcementHeaderImage))
+            click(getDriver().findElement(announcementHeaderImage));
     }
 
     public void openMenu(){
