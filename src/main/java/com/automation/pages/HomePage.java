@@ -4,6 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
+import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class HomePage extends BasePage {
@@ -23,8 +24,7 @@ public class HomePage extends BasePage {
     @AndroidFindBy(id="org.wikipedia:id/fragment_main_nav_tab_layout")
     private AndroidElement navigationBar;
 
-    @AndroidFindBy(id="org.wikipedia:id/view_announcement_header_image")
-    private AndroidElement announcementHeaderImage;
+    private By announcementHeaderImage = By.id("view_announcement_header_image");
 
     public HomePage(AppiumDriver<MobileElement> driver) {
         super(driver);
@@ -47,8 +47,12 @@ public class HomePage extends BasePage {
         return menuOverflow.isDisplayed();
     }
 
-    public boolean isAnnouncementImageDisplayed(){
-        return announcementHeaderImage.isDisplayed();
+    public boolean isAnnouncementImagePresent(){
+        return isElementPresent(announcementHeaderImage);
+    }
+
+    public void closeAnnouncementImage() {
+        click(getDriver().findElement(announcementHeaderImage));
     }
 
     public void openMenu(){

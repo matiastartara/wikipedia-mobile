@@ -8,6 +8,7 @@ import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.touch.LongPressOptions;
 import io.appium.java_client.touch.offset.PointOption;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -20,60 +21,68 @@ public class BasePage {
     private AppiumDriver<MobileElement> driver;
     private WebDriverWait wait;
 
-    public BasePage(AppiumDriver<MobileElement> driver){
-        this.driver=driver;
-        wait = new WebDriverWait(driver,10);
-        PageFactory.initElements(new AppiumFieldDecorator(driver),this);
+    public BasePage(AppiumDriver<MobileElement> driver) {
+        this.driver = driver;
+        wait = new WebDriverWait(driver, 10);
+        PageFactory.initElements(new AppiumFieldDecorator(driver), this);
     }
 
-    protected AppiumDriver<MobileElement> getDriver(){
+    protected AppiumDriver<MobileElement> getDriver() {
         return driver;
     }
 
-    protected WebDriverWait getWait(){
+    protected WebDriverWait getWait() {
         return wait;
     }
 
-    protected void click(String text){
+    protected void click(String text) {
         By locator = AndroidUIAutomator("text(\"" + text + "\")");
         getWait().until(ExpectedConditions.elementToBeClickable(locator)).click();
     }
 
-    protected void click(MobileElement element){
+    protected void click(MobileElement element) {
         getWait().until(ExpectedConditions.elementToBeClickable(element)).click();
     }
 
-    protected String getText(MobileElement element){
+    protected String getText(MobileElement element) {
         return getWait().until(ExpectedConditions.visibilityOf(element)).getText();
     }
 
-    protected void type(MobileElement element, String text){
+    protected void type(MobileElement element, String text) {
         getWait().until(ExpectedConditions.elementToBeClickable(element));
         element.clear();
         element.sendKeys(text);
     }
 
     //Horizontal scroll
-    protected void swipe(WebElement fromElement,WebElement toElement){
+    protected void swipe(WebElement fromElement, WebElement toElement) {
         TouchAction tAction = new TouchAction(getDriver());
         tAction.press(PointOption.point(fromElement.getLocation())).waitAction()
                 .moveTo(PointOption.point(toElement.getLocation())).release().perform();
     }
 
-    protected void scrollTo(String text){
+    protected void scrollTo(String text) {
         ((AndroidDriver<MobileElement>) driver).findElementByAndroidUIAutomator
                 (("new UiScrollable(new UiSelector().scrollable(true).instance(0)).scrollIntoView(new UiSelector()" +
-                        ".textContains(\""+text+"\").instance(0))"));
+                        ".textContains(\"" + text + "\").instance(0))"));
     }
 
-    public void longPress(WebElement element){
-        TouchAction tAction=new TouchAction(driver);
+    public void longPress(WebElement element) {
+        TouchAction tAction = new TouchAction(driver);
         tAction.longPress((LongPressOptions) element).perform();
     }
 
-    public void selectOptionSpinner(MobileElement spinner,String optionTextSpinner){
+    public void selectOptionSpinner(MobileElement spinner, String optionTextSpinner) {
         spinner.click();
         driver.findElement(By.name(optionTextSpinner)).click();
     }
 
+    protected boolean isElementPresent(By by) {
+        try {
+            driver.findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
 }
