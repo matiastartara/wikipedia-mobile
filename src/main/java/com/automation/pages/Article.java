@@ -1,17 +1,16 @@
 package com.automation.pages;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidElement;
+import org.openqa.selenium.WebElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class Article extends BasePage {
 
-    @AndroidFindBy(id="org.wikipedia:id/view_page_title_text")
-    private AndroidElement title;
+    @AndroidFindBy(xpath = "//android.view.View[@resource-id='pcs']/android.view.View[1]/android.widget.TextView")
+    private WebElement title;
 
-    public Article(AppiumDriver<MobileElement> driver) {
+    public Article(AppiumDriver driver) {
         super(driver);
     }
 

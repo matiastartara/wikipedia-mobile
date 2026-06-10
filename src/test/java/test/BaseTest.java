@@ -34,7 +34,7 @@ public class BaseTest extends ExtentReport {
         driver.quit();
     }
 
-    protected AppiumDriver<?> getDriver() {
+    protected AppiumDriver getDriver() {
         return driver;
     }
 }

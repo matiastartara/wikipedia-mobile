@@ -1,63 +1,42 @@
 package com.automation.pages;
 
 import io.appium.java_client.AppiumDriver;
-import io.appium.java_client.MobileElement;
-import io.appium.java_client.android.AndroidElement;
+import org.openqa.selenium.WebElement;
 import io.appium.java_client.pagefactory.AndroidFindBy;
-import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class HomePage extends BasePage {
 
-    @AndroidFindBy(id="org.wikipedia:id/search_container")
-    private AndroidElement searchContainer;
+    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"org.wikipedia:id/navigation_bar_item_icon_container\").instance(2)")
+    private WebElement searchButton;
 
-    @AndroidFindBy(id="org.wikipedia:id/voice_search_button")
-    private AndroidElement voiceSearchBtn;
+    @AndroidFindBy(className = "android.widget.Button")
+    private WebElement nextBtn;
 
-    @AndroidFindBy(id="menu_overflow_button")
-    private AndroidElement menuOverflow;
+    @AndroidFindBy(className = "android.widget.Button")
+    private WebElement nextDataBtn;
 
-    @AndroidFindBy(id="org.wikipedia:id/day_header_text")
-    private AndroidElement dayText;
+    @AndroidFindBy(className = "android.widget.Button")
+    private WebElement nextLanguageBtn;
 
-    @AndroidFindBy(id="org.wikipedia:id/fragment_main_nav_tab_layout")
-    private AndroidElement navigationBar;
+    @AndroidFindBy(uiAutomator = "new UiSelector().className(\"android.widget.Button\").instance(0)")
+    private WebElement nextTopicsBtn;
 
-    private By announcementHeaderImage = By.id("view_announcement_header_image");
-
-    public HomePage(AppiumDriver<MobileElement> driver) {
+    public HomePage(AppiumDriver driver) {
         super(driver);
     }
 
     public SearchPage openSearch(){
-        getWait().until(ExpectedConditions.visibilityOf(searchContainer)).click();
+        getWait().until(ExpectedConditions.visibilityOf(searchButton)).click();
         return new SearchPage(getDriver());
     }
 
-    public boolean isVoiceSearchBtnDisplayed(){
-        return voiceSearchBtn.isDisplayed();
-    }
-
-    public boolean isNavigationBarDisplayed(){
-        return navigationBar.isDisplayed();
-    }
-
-    public boolean isMenuOverflowDisplayed(){
-        return menuOverflow.isDisplayed();
-    }
-
-    public void closeAnnouncementImage() {
-        if (isElementPresent(announcementHeaderImage))
-            click(getDriver().findElement(announcementHeaderImage));
-    }
-
-    public void openMenu(){
-        click(menuOverflow);
-    }
-
-    public String getDayHeaderText(){
-        return getWait().until(ExpectedConditions.visibilityOf(dayText)).getText();
+    public HomePage clickOnNext(){
+        getWait().until(ExpectedConditions.visibilityOf(nextBtn)).click();
+        getWait().until(ExpectedConditions.visibilityOf(nextDataBtn)).click();
+        getWait().until(ExpectedConditions.visibilityOf(nextLanguageBtn)).click();
+        getWait().until(ExpectedConditions.visibilityOf(nextTopicsBtn)).click();
+        return this;
     }
 
 }

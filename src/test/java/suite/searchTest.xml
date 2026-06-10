@@ -5,7 +5,7 @@
     <classes>
         <class name="test.SearchTest">
             <methods>
-                <include name="HomeElementsTest"></include>
+                <include name="SearchArticleTest"></include>
             </methods>
         </class>
     </classes>
