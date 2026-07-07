@@ -21,5 +21,4 @@ public class WaitUtils {
         return new WebDriverWait(driver, Duration.ofSeconds(maxWait)).until((ExpectedCondition<Boolean>)
                 d -> elements.stream().anyMatch(x->x.getText().equals(optionText)));
     }
-
 }

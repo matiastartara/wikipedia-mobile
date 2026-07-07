@@ -51,7 +51,6 @@ public class SearchPage extends BasePage {
 
         results.get(0).click();
         closePopupIfPresent();
-
     }
 
     public SearchPage closePopupIfPresent() {
@@ -74,5 +73,4 @@ public class SearchPage extends BasePage {
         }
         return this;
     }
-
 }

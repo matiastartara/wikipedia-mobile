@@ -41,3 +41,6 @@ buildNumber.properties
 /reports/
 *.html
 .DS_Store
+
+# APK binaries - download from official Wikimedia releases instead
+*.apk

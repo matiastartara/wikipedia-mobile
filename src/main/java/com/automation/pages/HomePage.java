@@ -38,5 +38,4 @@ public class HomePage extends BasePage {
         getWait().until(ExpectedConditions.visibilityOf(nextTopicsBtn)).click();
         return this;
     }
-
 }

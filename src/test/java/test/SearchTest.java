@@ -24,5 +24,4 @@ public class SearchTest extends BaseTest {
         test.log(Status.INFO, "Checking article");
         Assert.assertEquals("Roma",article.getTitle());
     }
-
 }

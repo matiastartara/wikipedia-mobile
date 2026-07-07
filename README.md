@@ -49,13 +49,113 @@ The project manages its dependencies via **Maven**. Key libraries include:
 
 ---
 
-## 🚀 Getting Started
+## ✅ Requirements
 
-### Prerequisites
-- **Java 17** or higher.
-- **Maven** installed and configured.
-- **Appium Server** (v2.0+ recommended).
-- **Android SDK** (for Emulator or Physical Device).
+Before running this project, make sure you have the following tools installed and properly configured:
+
+### 1. 📦 Wikipedia APK
+The APK is **not included in this repository** (binary files don't belong in Git). Download the exact version used in this project directly from the official Wikimedia releases server:
+
+| Version | Date | Download |
+| :--- | :--- | :--- |
+| **50591** (tested) | 2026-06-02 | [wikipedia-50591-r-2026-06-02.apk](https://releases.wikimedia.org/mobile/android/wikipedia/stable/wikipedia-50591-r-2026-06-02.apk) |
+
+> All stable releases are available at: https://releases.wikimedia.org/mobile/android/wikipedia/stable/
+
+Once downloaded, place the APK in:
+```
+src/main/resources/org.wikipedia_50591.apk
+```
+
+---
+
+### 2. 🤖 Android Emulator (Android Studio)
+An **Android Virtual Device (AVD)** is required to run the tests on an emulated device.
+
+- Download and install **[Android Studio](https://developer.android.com/studio)**.
+- Open Android Studio → **Tools → Device Manager** (or AVD Manager).
+- Create a new virtual device (e.g., **Pixel 6**, API Level 33+).
+- Start the emulator before running any tests — the device must be booted and visible via `adb devices`.
+
+> **Tip:** You can also launch the emulator directly from the terminal once the AVD is created:
+> ```bash
+> emulator -avd <your_avd_name>
+> ```
+
+---
+
+### 3. ⚡ Appium Server
+**Appium** must be installed globally and running as a server before executing the test suite.
+
+- Install Appium via npm:
+  ```bash
+  npm install -g appium
+  ```
+- Install the **UiAutomator2 driver** (required for Android):
+  ```bash
+  appium driver install uiautomator2
+  ```
+- Verify your environment is correctly set up:
+  ```bash
+  appium doctor --android
+  ```
+
+---
+
+### 4. 🔍 Appium Inspector
+**Appium Inspector** is used to inspect mobile elements and obtain the locators (resource-id, xpath, accessibility id, etc.) needed to build the Page Object classes.
+
+- Download it from: [https://github.com/appium/appium-inspector/releases](https://github.com/appium/appium-inspector/releases)
+- Connect it to your running Appium server (`http://127.0.0.1:4723`) and start a session using the desired capabilities of your device.
+- Use it to explore the app's UI hierarchy and copy element locators directly into your Page Objects.
+
+---
+
+## 💻 Commands
+
+### Start the Android Emulator (from Android Studio)
+
+1. Open **Android Studio**.
+2. Go to **Tools → Device Manager**.
+3. Click the ▶️ **Play** button next to your desired AVD to launch the emulator.
+4. Wait until the device is fully booted (the home screen should be visible).
+5. Confirm the device is recognized by running:
+   ```bash
+   adb devices
+   ```
+   Expected output:
+   ```
+   List of devices attached
+   emulator-5554   device
+   ```
+
+---
+
+### Start Appium Server (Terminal)
+
+Open a terminal and run the following command to start the Appium server:
+
+```bash
+appium
+```
+
+By default, Appium listens on **port 4723**. You should see output like:
+
+```
+[Appium] Welcome to Appium v2.x.x
+[Appium] Appium REST http interface listener started on http://0.0.0.0:4723
+```
+
+> **Important:** Keep this terminal open while running the tests. Closing it will stop the Appium server.
+
+To start Appium on a custom port or host:
+```bash
+appium --port 4723 --address 127.0.0.1
+```
+
+---
+
+## 🚀 Getting Started
 
 ### Installation
 1. **Clone the repository:**
@@ -80,6 +180,10 @@ The project manages its dependencies via **Maven**. Key libraries include:
 ---
 
 ## 🧪 Running Tests
+
+> ⚠️ **Before running tests, make sure:**
+> 1. The **Android Emulator** is running and visible via `adb devices`.
+> 2. The **Appium server** is running in a separate terminal (`appium`).
 
 ### Via TestNG Suite (Recommended)
 You can run specific test suites defined in the XML files:
@@ -109,4 +213,3 @@ After execution, the **ExtentReports** will be generated in the project root or 
 | **Push** | `git push origin feature/your-feature` |
 
 ---
-
