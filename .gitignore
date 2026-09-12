@@ -44,3 +44,6 @@ buildNumber.properties
 
 # APK binaries - download from official Wikimedia releases instead
 *.apk
+
+# Appium MCP local artifacts
+.appium-mcp/

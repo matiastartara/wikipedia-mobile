@@ -1,0 +1,11 @@
+{
+  "android": {
+    "appium:app": "src/main/resources/org.wikipedia_50591.apk",
+    "appium:deviceName": "emulator-5554",
+    "appium:appPackage": "org.wikipedia",
+    "appium:appActivity": "org.wikipedia.main.MainActivity",
+    "appium:automationName": "UiAutomator2",
+    "appium:noReset": false,
+    "appium:autoGrantPermissions": true
+  }
+}

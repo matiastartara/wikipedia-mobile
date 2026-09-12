@@ -26,13 +26,21 @@ The framework follows a **Page Object Model (POM)** design pattern to ensure mai
 wikipedia-mobile/
 ├── src/
 │   ├── main/java/com/automation/
-│   │   ├── pages/        # Page Object classes
+│   │   ├── pages/        # Page Object classes (HomePage, SearchPage, MorePage,
+│   │   │                 # CreateAccountPage, Article, BasePage)
 │   │   ├── report/       # ExtentReports configuration
 │   │   └── utils/        # Driver and synchronization utilities
-│   └── test/java/test/   # Test cases (SearchTest, etc.)
-├── src/test/java/suite/  # TestNG suite XML files
+│   └── test/java/test/   # Test cases (SearchTest, NavigationTest, etc.)
+├── src/test/java/suite/  # TestNG suite XML files (searchTest.xml, navigationTest.xml)
 └── src/main/resources/   # App binary and config properties
 ```
+
+### Available Tests
+
+| Test class | Suite XML | What it covers |
+| :--- | :--- | :--- |
+| `SearchTest` | `searchTest.xml` | Search an article from Home and open it |
+| `NavigationTest` | `navigationTest.xml` | Navigate Home → **More** → **Log in / join Wikipedia** and verify the Create Account screen renders |
 
 ---
 
@@ -108,6 +116,73 @@ An **Android Virtual Device (AVD)** is required to run the tests on an emulated 
 - Download it from: [https://github.com/appium/appium-inspector/releases](https://github.com/appium/appium-inspector/releases)
 - Connect it to your running Appium server (`http://127.0.0.1:4723`) and start a session using the desired capabilities of your device.
 - Use it to explore the app's UI hierarchy and copy element locators directly into your Page Objects.
+
+---
+
+### 5. 🤖 Appium MCP (for use with Claude Code)
+
+This project can also be inspected and driven through the **Appium MCP server**,
+which lets an AI coding agent (Claude Code) launch the app on your emulator,
+tap through screens, and read the real UI hierarchy — the same job Appium
+Inspector does, but callable directly from a chat session while it writes
+Page Objects and tests for you.
+
+#### Install
+
+From this project's directory, register the MCP server with Claude Code:
+
+```bash
+claude mcp add appium-mcp -- npx -y -p appium@latest -p appium-mcp@latest appium-mcp
+```
+
+It runs an Appium driver **embedded inside the MCP process** — you do not
+need a separate `appium` server running for this workflow (that's only
+needed for the real `mvn test` runs, see above).
+
+Two local files back this integration and are already covered by `.gitignore`
+(or should be treated as local-only if you add them):
+
+- `appium-mcp.capabilities.json` — default capabilities the MCP uses to launch the app (app path, package, activity, device name). Example already used in this repo:
+  ```json
+  {
+    "android": {
+      "appium:app": "src/main/resources/org.wikipedia_50591.apk",
+      "appium:deviceName": "emulator-5554",
+      "appium:appPackage": "org.wikipedia",
+      "appium:appActivity": "org.wikipedia.main.MainActivity",
+      "appium:automationName": "UiAutomator2",
+      "appium:noReset": false,
+      "appium:autoGrantPermissions": true
+    }
+  }
+  ```
+- `.appium-mcp/screenshots/` — where the MCP saves screenshots taken during a session.
+
+#### Verify it's connected
+
+```bash
+claude mcp get appium-mcp
+```
+Should report `✔ Connected`.
+
+#### Basic workflow inside a Claude Code session
+
+1. **Discover/select the device** — `select_device` (platform: `android`). With one emulator running it auto-selects it (e.g. `emulator-5554`); with several, it asks you to pick.
+2. **Create a session** — `appium_session_management` with `action=create`, passing the capabilities above (or let it use `appium-mcp.capabilities.json` via `CAPABILITIES_CONFIG`).
+3. **Drive the app** — `appium_gesture` (`tap`, `scroll_to_element`, `swipe`, `back`, …), `appium_find_element` to resolve a locator to an element, `appium_get_page_source` to dump the current screen's UI hierarchy, `appium_screenshot` for a visual check.
+4. **Read real locators off the page source** — resource-ids, content-desc, and text values come straight from the live app, so Page Objects are built from confirmed selectors instead of guesses.
+5. **Clean up** — `appium_session_management` with `action=delete` when done exploring, so no orphaned session/emulator lock is left behind.
+
+#### Tips for generating new tests with the MCP
+
+- **Inspect before you code.** Always walk the real flow with the MCP (tap through the screens, dump `appium_get_page_source`) before writing a single `@AndroidFindBy` — don't guess resource-ids from memory or from similar apps.
+- **Locator priority**: `id` (Android `resource-id`) → `accessibility id` / `content-desc` → `-android uiautomator` (`UiSelector`) → `xpath` as a last resort. Large/brittle xpaths are a sign the element needs a better anchor (parent container, sibling text, etc.).
+- **Watch for non-clickable text.** A visible label (e.g. "Log in / join Wikipedia") is sometimes a non-clickable child `TextView` inside a clickable parent container — tap the *container's* resource-id, not the text node.
+- **Page source can be huge.** When a dump exceeds the inline output limit it's saved to a file; grep/`jq` for the `resource-id=`/`content-desc=`/`text=` attributes you actually need instead of reading the whole thing.
+- **Onboarding resets every run.** With `noReset: false`, the 4-screen onboarding flow appears on every fresh session — script through it (see `HomePage.clickOnNext()`) before asserting anything on Home.
+- **Follow the existing POM shape.** A page object extends `BasePage`, uses `@AndroidFindBy`, and page-navigating methods return the *next* page's object (see `HomePage.openMore() → MorePage`, `MorePage.openLoginJoinWikipedia() → CreateAccountPage`).
+- **Validate twice.** After the MCP confirms a flow works, still run the test for real via `mvn test -DsuiteXmlFile=...` against a real Appium server — the MCP's embedded driver session is separate from the one `DriverUtils` creates for actual test runs.
+- See `CLAUDE.md` for the full list of already-mapped screens/locators (onboarding, Home bottom nav, More menu, Create Account, Search) so you don't have to re-discover them.
 
 ---
 
@@ -189,7 +264,10 @@ appium --port 4723 --address 127.0.0.1
 You can run specific test suites defined in the XML files:
 ```bash
 mvn test -DsuiteXmlFile=src/test/java/suite/searchTest.xml
+mvn test -DsuiteXmlFile=src/test/java/suite/navigationTest.xml
 ```
+
+> **Note:** `mvn test` alone (without `-DsuiteXmlFile`) auto-discovers and runs **every** `*Test` class via Surefire's default TestNG behavior, since `suiteXmlFiles` isn't wired into the `maven-surefire-plugin` in `pom.xml`. Passing `-DsuiteXmlFile` doesn't currently restrict which classes run — it's accepted as a convention for future wiring. If you need true per-suite isolation, add a `suiteXmlFiles` block to the surefire plugin config.
 
 ---
 
