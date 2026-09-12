@@ -22,6 +22,9 @@ public class HomePage extends BasePage {
     @AndroidFindBy(uiAutomator = "new UiSelector().className(\"android.widget.Button\").instance(0)")
     private WebElement nextTopicsBtn;
 
+    @AndroidFindBy(id = "org.wikipedia:id/nav_tab_more")
+    private WebElement moreButton;
+
     public HomePage(AppiumDriver driver) {
         super(driver);
     }
@@ -29,6 +32,11 @@ public class HomePage extends BasePage {
     public SearchPage openSearch(){
         getWait().until(ExpectedConditions.visibilityOf(searchButton)).click();
         return new SearchPage(getDriver());
+    }
+
+    public MorePage openMore(){
+        click(moreButton);
+        return new MorePage(getDriver());
     }
 
     public HomePage clickOnNext(){

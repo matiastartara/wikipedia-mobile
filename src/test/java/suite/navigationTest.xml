@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Default Suite">
+<test name="Wikipedia Navigation Test Automation">
+    <classes>
+        <class name="test.NavigationTest">
+            <methods>
+                <include name="navigateToLoginTest"></include>
+            </methods>
+        </class>
+    </classes>
+</test>
+</suite>
